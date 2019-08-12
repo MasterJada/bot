@@ -34,6 +34,10 @@ const subscribers = [];
     });
   };
   
+  http.createServer((req, resp) =>{
+    resp.writeHead(200, {'Content-Type': 'text/html'});
+    resp.end('Hello World!');
+  }).listen(8080)
 
 
   tBot.onText(/\unsubscribe/, (msg)=>{
