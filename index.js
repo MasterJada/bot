@@ -37,9 +37,7 @@ const subscribers = [];
       if(url){
         request(url , { json: true }, (err, res, body) => {
           if (err) { return console.log(err); }
-          console.log("Show body");
-          console.log(res);
-          console.log(body); 
+     
           body.forEach(element => {
             var url = element.url
             if(url.endsWith('apk')){
