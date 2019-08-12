@@ -17,21 +17,38 @@ const subscribers = [];
         tBot.sendMessage(chatId, "Теперь ты будешь получать обновы")
   });
   
-  tBot.onText(/link/, (msg)=>{
+  tBot.onText(/\unsubscribe/, (msg)=>{
     const chatId = msg.chat.id
-    tBot.sendMessage(chatId, "Okay")
-    //"https://18-171504908-gh.circle-artifacts.com/0/apks/release/TestApp%201%201.0-release.apk"
-    
-        download("https://18-171504908-gh.circle-artifacts.com/0/apks/release/TestApp%201%201.0-release.apk",
-        "lastBuild.apk", ()=>{
-            tBot.sendDocument(chatId, fs.createReadStream("lastBuild.apk"))
-        })
-  });
+    for(var i = 0; i< subscribers.length;  i++){
+        if(subscribers[i] == chatId){
+            subscribers.splice(i, 1)
+        }
+        console.log(subscribers);
+    }
+});
 
   app.post("/test",(req, resp) =>{
     console.log(req.body.url);
     resp.send("Hello!")
-  })
+  });
+
+  app.post('/deploy', (req, resp) =>{
+      var url = req.body.url;
+      if(url){
+        request(url , { json: true }, (err, res, body) => {
+          if (err) { return console.log(err); }
+          body.forEach(element => {
+            var url = element.url
+            if(url.endsWith('apk')){
+              subscribers.forEach(chat => {
+                tBot.sendMessage(chat, url)
+              });
+            }
+          });
+        });
+      }
+      resp.json({'status': 'ok'})
+  });
 
   app.get("/",(req, resp) =>{
       resp.send("<h1>Ok it's works</h1>")
@@ -42,14 +59,6 @@ app.listen(port,()=> {
   console.log("Server run on " + port);
 })
 
-  tBot.onText(/\unsubscribe/, (msg)=>{
-        const chatId = msg.chat.id
-        for(var i = 0; i< subscribers.length;  i++){
-            if(subscribers[i] == chatId){
-                subscribers.splice(i, 1)
-            }
-            console.log(subscribers);
-        }
-  });
+ 
 
-  //curl -d "url=google.com" -X POST http://localhost:4000/test
+  //curl -d "url=https://google.com" -X POST http://localhost:4000/test
