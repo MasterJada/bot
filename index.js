@@ -41,14 +41,14 @@ const subscribers = [];
           console.log(res);
           console.log(body);
           
-          body.forEach(element => {
-            var url = element.url
-            if(url.endsWith('apk')){
-              subscribers.forEach(chat => {
-                tBot.sendMessage(chat, url)
-              });
-            }
-          });
+          // body.forEach(element => {
+          //   var url = element.url
+          //   if(url.endsWith('apk')){
+          //     subscribers.forEach(chat => {
+          //       tBot.sendMessage(chat, url)
+          //     });
+          //   }
+          // });
         });
       }
       resp.json({'status': 'ok'})
