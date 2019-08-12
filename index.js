@@ -33,11 +33,11 @@ const subscribers = [];
       request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
     });
   };
-  var port = process.env.PORT || 4000;
-  http.createServer((req, resp) =>{
-    resp.writeHead(200, {'Content-Type': 'text/html'});
-    resp.end('Hello World!');
-  }).listen(port)
+  // var port = process.env.PORT || 4000;
+  // http.createServer((req, resp) =>{
+  //   resp.writeHead(200, {'Content-Type': 'text/html'});
+  //   resp.end('Hello World!');
+  // }).listen(port)
 
 
   tBot.onText(/\unsubscribe/, (msg)=>{
