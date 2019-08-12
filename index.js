@@ -39,16 +39,15 @@ const subscribers = [];
           if (err) { return console.log(err); }
           console.log("Show body");
           console.log(res);
-          console.log(body);
-          
-          // body.forEach(element => {
-          //   var url = element.url
-          //   if(url.endsWith('apk')){
-          //     subscribers.forEach(chat => {
-          //       tBot.sendMessage(chat, url)
-          //     });
-          //   }
-          // });
+          console.log(body); 
+          body.forEach(element => {
+            var url = element.url
+            if(url.endsWith('apk')){
+              subscribers.forEach(chat => {
+                tBot.sendMessage(chat, url)
+              });
+            }
+          });
         });
       }
       resp.json({'status': 'ok'})
@@ -66,4 +65,6 @@ app.listen(port,()=> {
  
 
   //curl -d "url=https://google.com" -X POST http://localhost:4000/test
-  //curl -d "url=https://circleci.com/api/v1.1/project/github/MasterJada/TestAppircle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d" -X POST https://olegscdbot.herokuapp.com//deploy
+  //curl -d "url=https://circleci.com/api/v1.1/project/github/Mas/20/artifacts?circle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d" -X POST https://olegscdbot.herokuapp.com/deploy
+
+//curl -d "url=https://circleci.com/api/v1.1/project/github/MasterJada/TestApp/20/artifacts?circle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d" -X POST https://olegscdbot.herokuapp.com/deploy
