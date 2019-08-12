@@ -62,3 +62,4 @@ app.listen(port,()=> {
  
 
   //curl -d "url=https://google.com" -X POST http://localhost:4000/test
+  //curl -d "url=https://circleci.com/api/v1.1/project/github/MasterJada/TestAppircle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d" -X POST https://olegscdbot.herokuapp.com//deploy
