@@ -82,6 +82,12 @@ const subscribers = [];
     })
   });
 
+ app.post("/subscribe", (req, resp) =>{
+   db.subscribeToProject({chatId: req.body.id}, req.body.prjID, (callback) =>{
+    resp.json(callback)
+   })
+ });
+  
 var port = process.env.PORT || 4000;
 app.listen(port,()=> {
   console.log("Server run on " + port);

@@ -29,7 +29,10 @@
                 <td>{{prj.name }}</td>
                 <td>{{ prj.subscribers.length }}</td>
                 <td>{{ prj._id}}</td>
-                <td><button class="btn btn-danger" v-on:click="deleteProject(prj._id)">remove</button> </td>
+                <td>
+                    <button class="btn btn-danger" v-on:click="deleteProject(prj._id)">remove</button>
+                    <button class="btn btn-success" v-on:click="subscribe(prj._id)">Subscribe</button>
+                 </td>
             </tr>
             </tbody>
         </table>
@@ -41,8 +44,6 @@
             <button v-on:click="addProject" class="btn btn-primary mb-2">Add</button>
         </div>
     </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -59,12 +60,7 @@ const config = {
           data: {
               info: null, 
               name: null,
-              projects: [
-                  {name: "TestApp",  subscribers: 1, token: "l;sdlmaskdmksdasmkldmalks"},
-                  {name: "TestApp1", subscribers: 20, token: "l;sdlmaskdmksdasmkldmalks"},
-                  {name: "TestApp2", subscribers: 11, token: "l;sdlmaskdmksdasmkldmalks"},
-                  {name: "TestApp3", subscribers: 5, token: "l;sdlmaskdmksdasmkldmalks"}
-              ]
+              projects: []
           },
           methods: {
                 addProject: function(event){
@@ -73,6 +69,7 @@ const config = {
                     axios
                     .post('/addproject', params, config).then(response => {
                         this.projects = response.data
+                        
                     }).catch(function (error) {
                          console.log(error);
                     });
@@ -82,6 +79,15 @@ const config = {
                     params.append('id', id);
                     axios
                     .post('/deleteproject', params, config)
+                    .then(response => this.projects = response.data)
+                    .catch(error => console.log(error));
+                },
+                subscribe: function(id){
+                    const params = new URLSearchParams();
+                    params.append('id', "test")
+                    params.append('prjID', id)
+                    axios
+                    .post('/subscribe', params, config)
                     .then(response => this.projects = response.data)
                     .catch(error => console.log(error));
                 }

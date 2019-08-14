@@ -26,10 +26,8 @@ module.exports.getAllProjects = function(callback){
         callback(prjs)
     })
 }
-
 module.exports.addProject = function(prject, callback){
     var prj = new Project(prject)
-    console.log(prj);
     prj.save(function (err, doc) {
         if (err) return console.log(err);
         module.exports.getAllProjects(callback)
@@ -39,6 +37,23 @@ module.exports.deleteProject = function(id, callback){
     Project.deleteOne({_id: id}, function(err){
         if(err)return console.log(err);
         module.exports.getAllProjects(callback)
+    })
+}
+
+module.exports.subscribeToProject = function(subscriber,prjID, callback){
+    var subs = new Subscriber(subscriber)
+    subs.save((err, usr) =>{
+        if(err) return console.log(err);
+        Project.findOne({_id: prjID},(err, project) =>{
+            if(err) console.log(err);
+            if(!project.subscribers.includes(subscriber.chatId)){
+                project.subscribers.push(subscriber.chatId)
+                project.save((err, saved) =>{
+                    module.exports.getAllProjects(callback)   
+                })
+                
+            }
+        })
     })
 }
 
