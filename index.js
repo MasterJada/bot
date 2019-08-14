@@ -4,6 +4,8 @@ var bodyParser = require('body-parser')
 var app = express();
 var request = require('request');
 
+var db = require('./db')
+
 app.use(bodyParser.urlencoded({ extended: false }))
 
 var token = "937074570:AAEydYJbz4U2Q6cqLM_YTiK1UjjYpTWRgMA";
@@ -52,8 +54,33 @@ const subscribers = [];
   });
 
   app.get("/",(req, resp) =>{
-      resp.send("<h1>Ok it's works</h1>")
-  })
+      resp.sendFile(__dirname+"/main.html")
+  });
+
+  app.get("/projects", (req, resp) =>{
+    db.getAllProjects((projects)=>{
+      if(projects){ 
+        resp.json(projects)
+      }else{
+        resp.json([])
+      }
+    })
+  });
+
+  app.post("/addproject", (req, resp)=>{
+    var project = {name: req.body.name} 
+    if(project){
+      db.addProject(project, (callback) =>{
+        resp.json(callback)
+      })
+    }
+  });
+
+  app.post("/deleteproject", (req, resp) =>{
+    db.deleteProject(req.body.id, (callback) => {
+        resp.json(callback)
+    })
+  });
 
 var port = process.env.PORT || 4000;
 app.listen(port,()=> {
