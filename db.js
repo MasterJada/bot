@@ -41,20 +41,20 @@ module.exports.deleteProject = function(id, callback){
 }
 
 module.exports.subscribeToProject = function(subscriber,prjID, callback){
-    var subs = new Subscriber(subscriber)
-    subs.save((err, usr) =>{
-        if(err) return console.log(err);
         Project.findOne({_id: prjID},(err, project) =>{
             if(err)return console.log(err);
+
             if(!project.subscribers.includes(subscriber.chatId)){
                 project.subscribers.push(subscriber.chatId)
+                // var subs = new Subscriber(subscriber)
+                // subs.save()
                 project.save((err, saved) =>{
                     callback(saved)   
                 })
                 
             }
         })
-    })
+    
 }
 module.exports.unsubscribeFromProject = function(chatId, prjID, callback){
     Project.findOne({_id: prjID}, (err, project) =>{
