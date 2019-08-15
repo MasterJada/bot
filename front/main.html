@@ -18,7 +18,7 @@
             <tr >
                 <th scope="col">#</th>
                 <th scope="col">Project name</th>
-                <th scope="col">Subscribers count</th>
+                <th scope="col">Subs</th>
                 <th scope="col">id</th>
                 <th scope="col">Edit</th>
             </tr>
@@ -49,55 +49,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
-const config = {
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
-}
-      var app = new Vue({
-          el: "#app",
-          data: {
-              info: null, 
-              name: null,
-              projects: []
-          },
-          methods: {
-                addProject: function(event){
-                    const params = new URLSearchParams();
-                    params.append('name', this.name);
-                    axios
-                    .post('/addproject', params, config).then(response => {
-                        this.projects = response.data
-                        
-                    }).catch(function (error) {
-                         console.log(error);
-                    });
-                },
-                deleteProject: function (id) {
-                    const params = new URLSearchParams();
-                    params.append('id', id);
-                    axios
-                    .post('/deleteproject', params, config)
-                    .then(response => this.projects = response.data)
-                    .catch(error => console.log(error));
-                },
-                subscribe: function(id){
-                    const params = new URLSearchParams();
-                    params.append('id', "test")
-                    params.append('prjID', id)
-                    axios
-                    .post('/subscribe', params, config)
-                    .then(response => this.projects = response.data)
-                    .catch(error => console.log(error));
-                }
-          },
-        created: function(){
-            axios
-            .get('/projects')
-            .then(response => (this.projects = response.data));
-        }
-      })  
-    </script>
+    <script src="vuemain.js"></script>
   </body>
 </html>

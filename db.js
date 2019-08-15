@@ -45,15 +45,32 @@ module.exports.subscribeToProject = function(subscriber,prjID, callback){
     subs.save((err, usr) =>{
         if(err) return console.log(err);
         Project.findOne({_id: prjID},(err, project) =>{
-            if(err) console.log(err);
+            if(err)return console.log(err);
             if(!project.subscribers.includes(subscriber.chatId)){
                 project.subscribers.push(subscriber.chatId)
                 project.save((err, saved) =>{
-                    module.exports.getAllProjects(callback)   
+                    callback(saved)   
                 })
                 
             }
         })
+    })
+}
+module.exports.unsubscribeFromProject = function(chatId, prjID, callback){
+    Project.findOne({_id: prjID}, (err, project) =>{
+        if(err)return console.log(err);
+        var index = project.subscribers.indexOf(chatId)
+        if (index > -1) {
+            project.subscribers.splice(index, 1);
+          }
+        callback()  
+    })
+}
+
+module.exports.getSubscribers = function(prjID, callback){
+    Project.findOne({_id: prjID},(err, project) => {
+        if(err) return console.log(err);
+        callback(project.subscribers)
     })
 }
 

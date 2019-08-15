@@ -5,18 +5,22 @@ var app = express();
 var request = require('request');
 
 var db = require('./db')
-
+app.use(express.static("front"))
 app.use(bodyParser.urlencoded({ extended: false }))
 
 var token = "937074570:AAEydYJbz4U2Q6cqLM_YTiK1UjjYpTWRgMA";
 const tBot = new TelegramBotApi(token, {polling: true});
 const subscribers = [];
 
-  tBot.onText(/\/subscribe/, (msg) =>{
+  tBot.onText(/\/subscribe (.+)/, (msg, match) =>{
      const chatId = msg.chat.id
-     subscribers.push(chatId)
-     console.log(subscribers);
-        tBot.sendMessage(chatId, "Теперь ты будешь получать обновы")
+     var projectID =  match[1]
+     if(match[1]){ 
+        db.subscribeToProject({chatId: chatId}, projectID, (response) =>{
+          tBot.sendMessage(chatId, "Ты подписан на проект "+ response.name)
+        })
+     }
+     
   });
   
   tBot.onText(/\unsubscribe/, (msg)=>{
@@ -36,16 +40,17 @@ const subscribers = [];
 
   app.post('/deploy', (req, resp) =>{
       var url = req.body.url;
+      var project = req.body.tokent;
       if(url){
         request(url , { json: true }, (err, res, body) => {
           if (err) { return console.log(err); }
-     
           body.forEach(element => {
             var url = element.url
             if(url.endsWith('apk')){
-              subscribers.forEach(chat => {
-                tBot.sendMessage(chat, url)
-              });
+              db.getSubscribers(project, (subscribers) =>{
+                subscribers.forEach(chatId => 
+                  tBot.sendMessage(chatId, url))
+              })
             }
           });
         });
@@ -54,7 +59,7 @@ const subscribers = [];
   });
 
   app.get("/",(req, resp) =>{
-      resp.sendFile(__dirname+"/main.html")
+      resp.sendFile(__dirname+"/front/main.html")
   });
 
   app.get("/projects", (req, resp) =>{
