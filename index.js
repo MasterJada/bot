@@ -40,7 +40,7 @@ const subscribers = [];
 
   app.post('/deploy', (req, resp) =>{
       var url = req.body.url;
-      var project = req.body.tokent;
+      var project = req.body.token;
       if(url){
         request(url , { json: true }, (err, res, body) => {
           if (err) { return console.log(err); }
