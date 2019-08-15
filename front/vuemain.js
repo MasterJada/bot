@@ -31,15 +31,6 @@ const config = {
                       .then(response => this.projects = response.data)
                       .catch(error => console.log(error));
                   },
-                  subscribe: function(id){
-                      const params = new URLSearchParams();
-                      params.append('id', "test")
-                      params.append('prjID', id)
-                      axios
-                      .post('/subscribe', params, config)
-                      .then(response => this.loadProjects())
-                      .catch(error => console.log(error));
-                  },
                   loadProjects: function(){
                     axios
                     .get('/projects')

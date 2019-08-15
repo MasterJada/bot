@@ -31,7 +31,7 @@
                 <td>{{ prj._id}}</td>
                 <td>
                     <button class="btn btn-danger" v-on:click="deleteProject(prj._id)"><span aria-hidden="true">&times;</span></button>
-                    <button class="btn btn-success" v-on:click="subscribe(prj._id)">Subscribe</button>
+                    <a class="btn btn-success" :href=`/config.yml?id=${prj._id}` role="button">Load config</a>
                  </td>
             </tr>
             </tbody>

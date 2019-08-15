@@ -1,37 +1,16 @@
-var TelegramBotApi = require('node-telegram-bot-api')
+
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
 var request = require('request');
+var fs = require('fs')
+var replace = require('buffer-replace');
 
 var db = require('./db')
+var tBot = require('./bot')
 app.use(express.static("front"))
 app.use(bodyParser.urlencoded({ extended: false }))
 
-var token = "937074570:AAEydYJbz4U2Q6cqLM_YTiK1UjjYpTWRgMA";
-const tBot = new TelegramBotApi(token, {polling: true});
-const subscribers = [];
-
-  tBot.onText(/\/subscribe (.+)/, (msg, match) =>{
-     const chatId = msg.chat.id
-     var projectID =  match[1]
-     if(match[1]){ 
-        db.subscribeToProject({chatId: chatId}, projectID, (response) =>{
-          tBot.sendMessage(chatId, "Ты подписан на проект "+ response.name)
-        })
-     }
-     
-  });
-  
-  tBot.onText(/\unsubscribe/, (msg)=>{
-    const chatId = msg.chat.id
-    for(var i = 0; i< subscribers.length;  i++){
-        if(subscribers[i] == chatId){
-            subscribers.splice(i, 1)
-        }
-        console.log(subscribers);
-    }
-});
 
   app.post("/test",(req, resp) =>{
     console.log(req.body.url);
@@ -95,10 +74,19 @@ const subscribers = [];
    })
  });
   
-var port = process.env.PORT || 4000;
-app.listen(port,()=> {
-  console.log("Server run on " + port);
+app.get('/config.yml', (req, resp) =>{
+    var prjID = req.query.id
+    if(!prjID) return resp.sendStatus(404)
+   fs.readFile(__dirname +"/config.txt", (err, data) =>{
+     resp.send(replace(data, "[token]", prjID))
+   })
 })
+
+var port = process.env.PORT || 4000;
+  app.listen(port,()=> {
+    console.log("Server run on " + port);
+})
+
 
  
 
