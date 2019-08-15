@@ -30,7 +30,7 @@
                 <td>{{ prj.subscribers.length }}</td>
                 <td>{{ prj._id}}</td>
                 <td>
-                    <button class="btn btn-danger" v-on:click="deleteProject(prj._id)">remove</button>
+                    <button class="btn btn-danger" v-on:click="deleteProject(prj._id)"><span aria-hidden="true">&times;</span></button>
                     <button class="btn btn-success" v-on:click="subscribe(prj._id)">Subscribe</button>
                  </td>
             </tr>
