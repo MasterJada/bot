@@ -41,9 +41,11 @@ const subscribers = [];
   app.post('/deploy', (req, resp) =>{
       var url = req.body.url;
       var project = req.body.token;
+      console.log(url);
+      console.log(project);
       if(url){
         request(url , { json: true }, (err, res, body) => {
-          if (err) { return console.log(err); }
+          if (err)  return console.log(err);
           body.forEach(element => {
             var url = element.url
             if(url.endsWith('apk')){
@@ -103,4 +105,4 @@ app.listen(port,()=> {
   //curl -d "url=https://google.com" -X POST http://localhost:4000/test
   //curl -d "url=https://circleci.com/api/v1.1/project/github/Mas/20/artifacts?circle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d" -X POST https://olegscdbot.herokuapp.com/deploy
 
-//curl -d "url=https://circleci.com/api/v1.1/project/github/MasterJada/TestApp/20/artifacts?circle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d" -X POST https://olegscdbot.herokuapp.com/deploy
+//curl -d "url=https://circleci.com/api/v1.1/project/github/MasterJada/TestApp/20/artifacts?circle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d&token=5d550b34eb455c7f90746f06" -X POST https://olegscdbot.herokuapp.com/deploy
