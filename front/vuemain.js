@@ -6,7 +6,6 @@ const config = {
         var app = new Vue({
             el: "#app",
             data: {
-                info: null, 
                 name: null,
                 projects: []
             },
